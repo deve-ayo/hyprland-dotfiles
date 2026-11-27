@@ -1,0 +1,81 @@
+@import url("../../.cache/wallust/colors.css");
+
+/* Material Design 3 Dark — App Launcher (Wofi) */
+* {
+    font-family: "Noto Sans", "JetBrainsMono Nerd Font", sans-serif;
+    font-size: 13.5px;
+    color: @foreground;
+}
+
+window {
+    background-color: alpha(@background, 0.94);
+    border: 1px solid alpha(@foreground, 0.10);
+    border-radius: 26px;
+}
+
+#outer-box {
+    margin: 14px;
+    padding: 4px;
+    background-color: transparent;
+}
+
+#input {
+    margin: 4px 4px 12px 4px;
+    padding: 12px 18px;
+    background-color: mix(@background, @foreground, 0.08);
+    border: 1.5px solid transparent;
+    border-radius: 999px;
+    color: @foreground;
+    font-weight: 500;
+    box-shadow: none;
+}
+
+#input:focus {
+    border-color: alpha(@color4, 0.70);
+    background-color: mix(@background, @foreground, 0.11);
+}
+
+#inner-box {
+    margin: 0 2px;
+    background-color: transparent;
+}
+
+#scroll {
+    margin: 0;
+    border: none;
+}
+
+#img {
+    margin-right: 12px;
+    margin-left: 4px;
+}
+
+#text {
+    margin: 2px 4px;
+    color: alpha(@foreground, 0.90);
+    font-weight: 500;
+}
+
+#entry {
+    padding: 9px 12px;
+    margin: 3px 2px;
+    border-radius: 16px;
+    border: none;
+    transition: background-color 0.15s ease;
+}
+
+#entry:hover {
+    background-color: alpha(@foreground, 0.06);
+}
+
+#entry:selected {
+    background-color: alpha(@color4, 0.22);
+    border: none;
+    border-radius: 16px;
+    outline: none;
+}
+
+#entry:selected #text {
+    color: @color12;
+    font-weight: 700;
+}

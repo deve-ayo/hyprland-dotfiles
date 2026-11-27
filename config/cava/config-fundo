@@ -1,0 +1,46 @@
+# Configuração dedicada do CAVA para rodar no fundo do Hyprland (sobre o papel de parede).
+# As cores seguem automaticamente o rice ativo via ~/.config/cava/themes/wallust.
+
+[general]
+framerate = 60
+autosens = 2
+sensitivity = 145
+bars = 0
+bar_width = 1
+bar_spacing = 1
+center_align = 1
+lower_cutoff_freq = 30
+higher_cutoff_freq = 14000
+# Entra em repouso após 2s de silêncio (0% CPU) e acorda sozinho assim que tocar áudio
+sleep_timer = 2
+
+[input]
+method = pipewire
+source = auto
+# active = 0 permite que a placa de som suspenda normalmente quando nada estiver tocando
+active = 0
+remix = 1
+virtual = 1
+
+[output]
+method = noncurses
+orientation = bottom
+channels = stereo
+# Oculta os topos das barras em silêncio: sem som, o fundo fica 100% invisível sobre o wallpaper
+show_idle_bar_heads = 0
+synchronized_sync = 0
+
+[color]
+theme = 'wallust'
+
+[smoothing]
+monstercat = 1
+waves = 0
+noise_reduction = 50
+
+[eq]
+1 = 1.0
+2 = 1.1
+3 = 1.2
+4 = 1.3
+5 = 1.4

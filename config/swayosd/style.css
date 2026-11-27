@@ -1,0 +1,62 @@
+/* Aviso de volume, brilho e microfone (swayosd) em pílula Material Design 3 Dark */
+@import url("../../.cache/wallust/colors.css");
+@define-color m3_primary @color4;
+
+window#osd {
+    border-radius: 999px;
+    border: 1px solid alpha(@foreground, 0.10);
+    background: alpha(@background, 0.94);
+    box-shadow: 0 8px 28px alpha(black, 0.38);
+}
+
+window#osd #container {
+    margin: 12px 22px;
+}
+
+window#osd image {
+    color: @m3_primary;
+}
+
+window#osd label {
+    color: @foreground;
+    font-family: "Noto Sans", "JetBrainsMono Nerd Font", sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+window#osd progressbar:disabled,
+window#osd image:disabled {
+    opacity: 0.45;
+}
+
+window#osd progressbar,
+window#osd segmentedprogress {
+    min-height: 10px;
+    border-radius: 999px;
+    background: transparent;
+    border: none;
+}
+
+window#osd trough,
+window#osd segment {
+    min-height: inherit;
+    border-radius: 999px;
+    border: none;
+    background: alpha(@foreground, 0.14);
+}
+
+window#osd progress,
+window#osd segment.active {
+    min-height: inherit;
+    border-radius: 999px;
+    border: none;
+    background: @m3_primary;
+}
+
+window#osd segment {
+    margin-left: 6px;
+}
+
+window#osd segment:first-child {
+    margin-left: 0;
+}

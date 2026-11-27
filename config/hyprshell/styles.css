@@ -1,0 +1,17 @@
+/* Gerado automaticamente pelo ricing (wallust + contraste WCAG) */
+:root {
+    --border-color: rgba(155, 132, 125, 0.55);
+    --border-color-active: rgba(150, 127, 58, 1);
+
+    --bg-color: rgba(23, 22, 21, 0.94);
+    --bg-color-hover: rgba(10, 9, 9, 0.96);
+
+    --border-radius: 20px;
+    --border-size: 2px;
+    --border-style: solid;
+
+    --text-color: rgba(238, 216, 210, 1);
+
+    --window-padding: 6px;
+    --bg-window-color: rgba(10, 9, 9, 0.92);
+}

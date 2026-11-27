@@ -1,0 +1,254 @@
+@import url("../../.cache/wallust/colors.css");
+
+/* Material Design 3 Dark — Superfícies tonais em pílulas (GTK3 CSS compatível) */
+@define-color m3_surface          alpha(@background, 0.92);
+@define-color m3_surface_high     mix(@background, @foreground, 0.08);
+@define-color m3_surface_highest  mix(@background, @foreground, 0.14);
+@define-color m3_on_surface       @foreground;
+@define-color m3_on_surface_var   alpha(@foreground, 0.70);
+@define-color m3_outline          alpha(@foreground, 0.10);
+@define-color m3_primary          @color4;
+@define-color m3_primary_cont     alpha(@color4, 0.22);
+@define-color m3_error            @color1;
+@define-color m3_warning          @color3;
+
+* {
+    font-family: "Noto Sans", "JetBrainsMono Nerd Font", "Symbols Nerd Font Mono", sans-serif;
+    font-size: 12.5px;
+    font-weight: 600;
+    min-height: 0;
+}
+
+window#waybar {
+    background: transparent;
+    color: @m3_on_surface;
+    border: none;
+}
+
+.modules-left,
+.modules-center,
+.modules-right {
+    background: @m3_surface;
+    border: 1px solid @m3_outline;
+    border-radius: 999px;
+    padding: 4px 8px;
+    box-shadow: 0 4px 18px alpha(black, 0.28);
+}
+
+.modules-center {
+    transition: all 0.22s ease;
+}
+
+tooltip {
+    background: mix(@background, @foreground, 0.06);
+    border: 1px solid alpha(@m3_primary, 0.35);
+    border-radius: 16px;
+    padding: 8px 12px;
+    box-shadow: 0 8px 24px alpha(black, 0.36);
+}
+
+tooltip label {
+    color: @m3_on_surface;
+    font-weight: 500;
+}
+
+/* Workspaces em pílulas Material You */
+#workspaces {
+    background: transparent;
+    margin: 0;
+    padding: 0 2px;
+}
+
+.ws {
+    padding: 3px 10px;
+    margin: 2px 2px;
+    border-radius: 999px;
+    color: @m3_on_surface_var;
+    background: transparent;
+    transition: all 0.18s ease;
+}
+
+.ws.visible:not(.active) {
+    color: @m3_on_surface;
+    background: @m3_surface_high;
+}
+
+.ws.active {
+    color: @background;
+    background: @m3_primary;
+    padding: 3px 15px;
+    font-weight: 700;
+}
+
+.ws.urgent {
+    color: @background;
+    background: @m3_error;
+}
+
+.ws:hover:not(.active) {
+    color: @m3_primary;
+    background: alpha(@m3_primary, 0.22);
+    padding: 3px 13px;
+}
+
+/* App em foco à esquerda */
+#custom-window {
+    color: @m3_on_surface;
+    padding: 3px 13px;
+    margin: 2px 2px 2px 6px;
+    border-radius: 999px;
+    background: @m3_surface_high;
+    font-weight: 600;
+}
+
+/* Visualizador Cava + Faixa atual no centro da Waybar */
+#custom-cava-mini {
+    color: @m3_primary;
+    font-family: "JetBrainsMono Nerd Font", "Noto Sans", monospace;
+    padding: 3px 13px;
+    margin: 2px 0;
+    border-radius: 999px;
+    letter-spacing: 1px;
+    font-weight: 700;
+    transition: all 0.22s cubic-bezier(0.22, 1.15, 0.36, 1.0);
+}
+
+#custom-cava-mini.idle {
+    padding: 0;
+    margin: 0;
+    opacity: 0;
+}
+
+#custom-cava-mini.idle-pill,
+#custom-cava-mini.paused {
+    color: @m3_on_surface_var;
+    background: @m3_surface_high;
+    padding: 3px 12px;
+}
+
+#custom-cava-mini.playing {
+    color: @m3_on_surface;
+    background: alpha(@m3_primary, 0.16);
+}
+
+#custom-cava-mini.track-change {
+    color: @background;
+    background: @m3_primary;
+    letter-spacing: 0.3px;
+    padding: 3px 16px;
+}
+
+/* Grupos compactos tonais da direita */
+#hardware,
+#conexoes {
+    background: @m3_surface_high;
+    border-radius: 999px;
+    margin: 2px 2px;
+    padding: 0 4px;
+}
+
+#hardware #cpu,
+#hardware #memory,
+#conexoes #pulseaudio,
+#conexoes #bluetooth,
+#conexoes #network {
+    background: transparent;
+    margin: 0;
+    padding: 3px 8px;
+    border-radius: 999px;
+    transition: all 0.20s cubic-bezier(0.22, 1.15, 0.36, 1.0);
+}
+
+#tray,
+#battery,
+#clock,
+#custom-notification {
+    color: @m3_on_surface;
+    padding: 3px 11px;
+    margin: 2px 2px;
+    border-radius: 999px;
+    background: @m3_surface_high;
+    transition: all 0.20s cubic-bezier(0.22, 1.15, 0.36, 1.0);
+}
+
+#clock {
+    background: @m3_primary_cont;
+    color: @m3_primary;
+    font-weight: 700;
+    padding: 3px 14px;
+}
+
+#custom-notification {
+    background: @m3_primary_cont;
+    color: @m3_primary;
+    padding: 3px 11px;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#network.disconnected,
+#bluetooth.disabled,
+#bluetooth.off,
+#bluetooth.no-controller,
+#pulseaudio.muted,
+#custom-notification.dnd-none,
+#custom-notification.dnd-notification {
+    color: alpha(@m3_on_surface, 0.45);
+    background: transparent;
+}
+
+#cpu.warning,
+#memory.warning,
+#battery.warning:not(.charging):not(.plugged) {
+    color: @m3_warning;
+    background: alpha(@m3_warning, 0.18);
+}
+
+#cpu.critical,
+#memory.critical,
+#battery.critical:not(.charging):not(.plugged) {
+    color: @background;
+    background: @m3_error;
+    animation: piscar 1s steps(2, start) infinite;
+}
+
+@keyframes piscar {
+    to { opacity: 0.50; }
+}
+
+#hardware #cpu:hover,
+#hardware #memory:hover,
+#conexoes #pulseaudio:hover,
+#conexoes #bluetooth:hover,
+#conexoes #network:hover {
+    color: @m3_primary;
+    background: alpha(@m3_primary, 0.20);
+    padding: 3px 11px;
+}
+
+#battery:hover {
+    color: @m3_primary;
+    background: alpha(@m3_primary, 0.22);
+    padding: 3px 14px;
+}
+
+#clock:hover {
+    color: @background;
+    background: @m3_primary;
+    padding: 3px 17px;
+}
+
+#custom-notification:hover {
+    color: @background;
+    background: @m3_primary;
+    padding: 3px 14px;
+}
+
+#custom-cava-mini:hover {
+    color: @m3_primary;
+    background: alpha(@m3_primary, 0.28);
+    padding: 3px 19px;
+    box-shadow: inset 0 0 0 1px alpha(@m3_primary, 0.55), 0 2px 10px alpha(@m3_primary, 0.22);
+}

@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# Mantém toda captura do cava apontando pro monitor da saída que está tocando som agora.
+# Prioridade: saída padrão se tiver stream ativo; senão a saída com mais streams ativos
+# (empate: a mais nova); sem nada tocando, a saída padrão.
+
+alvo() {
+    local padrao
+    padrao=$(pactl get-default-sink)
+    pactl -f json list sinks 2>/dev/null | jq -r --arg padrao "$padrao" \
+        --argjson inputs "$(pactl -f json list sink-inputs 2>/dev/null || echo '[]')" '
+        [ .[] | . as $s | {name, index,
+            ativos: ([ $inputs[] | select(.sink == $s.index and (.corked | not)) ] | length)} ] as $sinks
+        | ($sinks | map(select(.name == $padrao and .ativos > 0)) | first)
+          // ($sinks | map(select(.ativos > 0)) | sort_by(.ativos, .index) | last)
+          // {name: $padrao}
+        | .name'
+}
+
+ajusta() {
+    local sink fonte
+    sink=$(alvo) || return
+    [ -n "$sink" ] || return
+    fonte="$sink.monitor"
+    # O cava pela entrada "pulse" se chama application.name=cava; pela entrada
+    # "pipewire" (a do Ayo Música) só tem node.name=cava -- aceitar os dois.
+    pactl -f json list source-outputs 2>/dev/null | jq -r '
+        .[] | select(.properties["application.name"] == "cava" or .properties["node.name"] == "cava")
+        | "\(.index) \(.source)"' |
+    while read -r id src; do
+        # Lista "short" em texto (índice<TAB>nome): o JSON do pactl quebra com acento.
+        nome=$(pactl list sources short 2>/dev/null | awk -v i="$src" '$1 == i {print $2}')
+        [ "$nome" = "$fonte" ] || pactl move-source-output "$id" "$fonte" 2>/dev/null
+    done
+}
+
+# $1 (opcional): PID a acompanhar; quando ele morre, o seguidor sai junto.
+dono=${1:-}
+conecta() {
+    exec 3< <(pactl subscribe 2>/dev/null)
+    assinante=$!
+}
+conecta
+trap 'kill "$assinante" 2>/dev/null' EXIT
+
+ajusta
+while :; do
+    if read -r -t 2 -u 3 linha; then
+        case "$linha" in
+            *"sink-input"*|*"on sink "*|*"on server"*|*"new' on source-output"*)
+                # agrupa rajadas de eventos
+                while read -r -t 0.3 -u 3 _; do :; done
+                ajusta ;;
+        esac
+    elif [ $? -le 128 ]; then
+        # pactl subscribe caiu (ex.: pipewire reiniciou): reconecta
+        sleep 1; conecta; ajusta
+    fi
+    [ -n "$dono" ] && ! kill -0 "$dono" 2>/dev/null && exit 0
+done

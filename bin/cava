@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Wrapper: roda o cava junto com o cava-segue-som, que troca a captura pra saída que está tocando.
+"$HOME/.local/bin/cava-segue-som" $$ >/dev/null 2>&1 &
+exec /usr/bin/cava "$@"

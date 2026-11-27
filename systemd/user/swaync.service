@@ -1,0 +1,10 @@
+[Unit]
+Description=Central de notificações (swaync)
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=dbus
+BusName=org.freedesktop.Notifications
+ExecStart=/usr/bin/swaync
+Restart=on-failure

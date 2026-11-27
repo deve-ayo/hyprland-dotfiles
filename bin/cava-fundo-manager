@@ -1,0 +1,127 @@
+#!/usr/bin/env python3
+"""Gerencia uma instância do CAVA de fundo (kitten panel) por monitor ativo no Hyprland."""
+import json
+import os
+import signal
+import socket
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+HOME = Path.home()
+CAVA_BIN = str(HOME / ".local/bin/cava")
+CAVA_CONF = str(HOME / ".config/cava/config-fundo")
+PANEL_ARGS = [
+    "/usr/bin/kitten", "panel",
+    "--edge=bottom",
+    "--layer=bottom",
+    "--lines=400px",
+    "--override-exclusive-zone=yes",
+    "--exclusive-zone=0",
+    "--focus-policy=not-allowed",
+    "--app-id=cava-fundo",
+    "-o", "background_opacity=0",
+    "-o", "window_padding_width=0",
+    "-o", "single_window_padding_width=0",
+    "-o", "font_size=6",
+    "-o", "confirm_os_window_close=0",
+    "-o", "enable_audio_bell=no",
+    "-o", "cursor_trail=0",
+    "-o", "default_pointer_shape=arrow",
+    "-o", "pointer_shape_when_dragging=arrow",
+    "-o", "pointer_shape_when_grabbed=arrow",
+]
+
+
+def active_monitors():
+    try:
+        out = subprocess.check_output(["hyprctl", "monitors", "-j"], text=True, timeout=2)
+        mons = json.loads(out)
+        return [m["name"] for m in mons if m.get("name") and not m.get("disabled")]
+    except Exception:
+        return []
+
+
+class Manager:
+    def __init__(self):
+        self.procs = {}  # monitor_name -> Popen
+        self.running = True
+
+    def sync(self):
+        wanted = set(active_monitors())
+        # Encerra painéis de monitores removidos/desativados ou processos que caíram
+        for mon in list(self.procs):
+            proc = self.procs[mon]
+            if mon not in wanted or proc.poll() is not None:
+                self._stop_proc(proc)
+                self.procs.pop(mon, None)
+
+        # Sobe painel para cada monitor ativo sem instância
+        for mon in sorted(wanted):
+            if mon not in self.procs:
+                cmd = [*PANEL_ARGS, f"--output-name={mon}", CAVA_BIN, "-p", CAVA_CONF]
+                self.procs[mon] = subprocess.Popen(cmd)
+
+    def _stop_proc(self, proc):
+        if proc.poll() is None:
+            proc.terminate()
+            try:
+                proc.wait(timeout=2)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+
+    def reload_colors(self, *_args):
+        subprocess.run(["pkill", "-USR1", "-x", "cava"], check=False)
+
+    def stop(self, *_args):
+        self.running = False
+        for proc in list(self.procs.values()):
+            self._stop_proc(proc)
+        self.procs.clear()
+        sys.exit(0)
+
+    def run(self):
+        signal.signal(signal.SIGTERM, self.stop)
+        signal.signal(signal.SIGINT, self.stop)
+        signal.signal(signal.SIGUSR1, self.reload_colors)
+
+        self.sync()
+        sig = os.environ.get("HYPRLAND_INSTANCE_SIGNATURE")
+        xrd = os.environ.get("XDG_RUNTIME_DIR")
+        sock_path = f"{xrd}/hypr/{sig}/.socket2.sock" if sig and xrd else None
+
+        while self.running:
+            if not sock_path or not os.path.exists(sock_path):
+                time.sleep(2)
+                self.sync()
+                continue
+            try:
+                with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as s:
+                    s.settimeout(4.0)
+                    s.connect(sock_path)
+                    buf = ""
+                    while self.running:
+                        try:
+                            chunk = s.recv(4096)
+                            if not chunk:
+                                break
+                            buf += chunk.decode("utf-8", errors="replace")
+                            if "\n" in buf:
+                                lines = buf.splitlines()
+                                buf = "" if buf.endswith("\n") else lines.pop()
+                                if any(
+                                    ln.startswith(("monitoradded", "monitorremoved", "configreloaded"))
+                                    for ln in lines
+                                ):
+                                    time.sleep(0.4)
+                                    self.sync()
+                        except socket.timeout:
+                            self.sync()
+            except Exception:
+                time.sleep(1.5)
+                self.sync()
+
+
+if __name__ == "__main__":
+    Manager().run()

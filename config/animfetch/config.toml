@@ -1,0 +1,20 @@
+# Configuração do animfetch — arte sci-fi integrada às cores do ricing (wallust + contraste WCAG)
+# Para alternar entre outras opções sci-fi a qualquer momento:
+#   animfetch --set saturn
+#   animfetch --set icosahedron
+#   animfetch --set blackhole
+
+animation = "blackhole"
+style = "quad"
+width = 44
+height = 16
+gap = 4
+
+color_source = "palette"
+palette_files = [
+  "~/.cache/wallust/animfetch-colors.json",
+  "~/.cache/wallust/pywal.json",
+]
+palette_accent = "color4"
+palette_value = "color7"
+palette_gradient = ["color6", "color4", "color5"]

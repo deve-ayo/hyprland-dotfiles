@@ -1,0 +1,11 @@
+# Secrets, caches and local runtime state must never be committed
+.env
+.env.*
+*.local
+*.bak
+*.bak-*
+__pycache__/
+*.pyc
+*.sqlite3
+*.db
+.DS_Store

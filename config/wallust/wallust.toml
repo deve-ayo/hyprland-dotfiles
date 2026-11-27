@@ -1,0 +1,20 @@
+# Configuração do wallust — gera as cores do rice a partir do papel de parede.
+# Documentação: https://explosion-mental.codeberg.page/wallust/
+
+backend = "fastresize"   # como a imagem é lida (fastresize, kmeans, wal, thumb...)
+color_space = "lch"      # espaço de cor usado para agrupar as cores
+palette = "dark16"       # padrão; o wallpaper.sh troca por light16 quando o papel de parede é claro
+check_contrast = true    # garante texto legível sobre o fundo
+
+# Cada template em ~/.config/wallust/templates vira um arquivo de cores.
+[templates]
+gtk      = { template = "colors.css",    target = "~/.cache/wallust/colors.css" }       # waybar + wofi
+kitty    = { template = "kitty.conf",    target = "~/.config/kitty/wallust.conf" }
+hyprland = { template = "hyprland.lua",  target = "~/.cache/wallust/hyprland.lua" }
+hyprlock = { template = "hyprlock.conf", target = "~/.cache/wallust/hyprlock.conf" }
+dunst    = { template = "dunstrc",       target = "~/.config/dunst/dunstrc.d/99-wallust.conf" }
+swaync   = { template = "swaync.css",    target = "~/.cache/wallust/swaync.css" }       # central de notificações
+foot     = { template = "foot.ini",      target = "~/.cache/wallust/foot.ini" }         # terminais foot
+cava     = { template = "cava.theme",    target = "~/.config/cava/themes/wallust" }      # visualizador de áudio cava
+btop     = { template = "btop.theme",    target = "~/.config/btop/themes/wallust.theme" } # monitor de sistema btop
+pywal    = { template = "pywal.json",    target = "~/.cache/wallust/pywal.json" }       # paleta para wallpaper.sh e tema GTK4/Qt

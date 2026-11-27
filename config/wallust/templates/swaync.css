@@ -1,0 +1,43 @@
+/* Gerado pelo wallust — não edite, será sobrescrito. */
+/* Cores da central de notificações em estilo Material Design 3 Dark; importado por ~/.config/swaync/style.css */
+:root {
+  --cc-bg: rgba({{background | rgb}}, 0.95);
+  --noti-border-color: rgba({{foreground | rgb}}, 0.08);
+  --noti-bg: {{color0 | rgb}};
+  --noti-bg-alpha: 0.96;
+  --noti-bg-darker: {{color0}};
+  --noti-bg-hover: rgba({{foreground | rgb}}, 0.08);
+  --noti-bg-focus: rgba({{color4 | rgb}}, 0.22);
+  --noti-close-bg: rgba({{foreground | rgb}}, 0.10);
+  --noti-close-bg-hover: rgba({{foreground | rgb}}, 0.20);
+  --text-color: {{foreground}};
+  --text-color-disabled: {{color8}};
+  --bg-selected: {{color4}};
+  --on-selected: {{background}};
+  --mpris-album-art-overlay: rgba({{background | rgb}}, 0.72);
+  --mpris-scrim-start: rgba({{background | rgb}}, 0.64);
+  --mpris-scrim-end: rgba({{background | rgb}}, 0.88);
+  --mpris-button-hover: rgba({{color4 | rgb}}, 0.24);
+  --mpris-album-art-icon-size: 64px;
+  --border-radius: 18px;
+}
+
+* {
+  font-family: "Noto Sans", "JetBrainsMono Nerd Font", sans-serif;
+}
+
+.control-center {
+  background: rgba({{background | rgb}}, 0.95);
+  border: 1px solid rgba({{foreground | rgb}}, 0.10);
+  border-radius: 26px;
+  padding: 8px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.44);
+}
+
+.notification-row .notification-background .notification,
+.notification-group.collapsed .notification-row .notification {
+  background: {{color0}};
+  border: 1px solid rgba({{foreground | rgb}}, 0.07);
+  border-radius: 20px;
+  padding: 6px;
+}

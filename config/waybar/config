@@ -1,0 +1,167 @@
+[
+{
+    "name": "top",
+    "layer": "bottom",
+    "position": "top",
+    "height": 38,
+    "margin-top": 6,
+    "margin-left": 10,
+    "margin-right": 10,
+    "spacing": 8,
+
+    "modules-left": ["custom/hypr-state", "group/workspaces", "custom/window"],
+    "modules-center": ["custom/cava-mini"],
+    "modules-right": ["tray", "group/hardware", "group/conexoes", "battery", "clock", "custom/notification"],
+
+    "group/hardware": {
+        "orientation": "inherit",
+        "modules": ["cpu", "memory"]
+    },
+
+    "group/conexoes": {
+        "orientation": "inherit",
+        "modules": ["pulseaudio", "bluetooth", "network"]
+    },
+
+    "custom/cava-mini": {
+        "exec": "$HOME/.config/waybar/scripts/cava-mini.py",
+        "return-type": "json",
+        "tooltip": true,
+        "on-click": "playerctl play-pause",
+        "on-scroll-up": "playerctl next",
+        "on-scroll-down": "playerctl previous"
+    },
+
+    "tray": {
+        "icon-size": 15,
+        "spacing": 8,
+        "show-passive-items": false
+    },
+
+    "cpu": {
+        "interval": 2,
+        "format": "  {usage}%",
+        "tooltip-format": "CPU: {usage}% (load {load})",
+        "states": {
+            "warning": 70,
+            "critical": 90
+        },
+        "on-click": "kitty -e btop"
+    },
+
+    "memory": {
+        "interval": 3,
+        "format": "  {percentage}%",
+        "tooltip-format": "RAM: {used:0.1f} GiB / {total:0.1f} GiB ({percentage}%)",
+        "states": {
+            "warning": 75,
+            "critical": 90
+        },
+        "on-click": "kitty -e btop"
+    },
+
+    "clock": {
+        "format": "󰃭  {:%d/%m · %H:%M}",
+        "tooltip-format": "<big>{:%A, %d de %B de %Y}</big>\n<tt><small>{calendar}</small></tt>"
+    },
+
+    "network": {
+        "format-wifi": "󰖩  {essid}",
+        "format-ethernet": "󰈀  Cabo",
+        "format-disconnected": "󰖪  Offline",
+        "tooltip-format-wifi": "Wi-Fi: {essid} ({signalStrength}%)",
+        "tooltip-format-ethernet": "Cabo conectado",
+        "tooltip-format-disconnected": "Desconectado",
+        "max-length": 14,
+        "on-click": "nm-connection-editor"
+    },
+
+    "bluetooth": {
+        "format": "󰂯  On",
+        "format-on": "󰂯  On",
+        "format-connected": "󰂱  {num_connections}",
+        "format-disabled": "󰂲  Off",
+        "format-off": "󰂲  Off",
+        "format-no-controller": "",
+        "tooltip-format": "Bluetooth ligado",
+        "tooltip-format-connected": "{device_alias} conectado",
+        "tooltip-format-disabled": "Bluetooth desligado",
+        "on-click": "blueman-manager"
+    },
+
+    "pulseaudio": {
+        "format": "󰕾  {volume}%{format_source}",
+        "format-muted": "󰖁  Mudo{format_source}",
+        "format-source": "",
+        "format-source-muted": " 󰍭",
+        "tooltip-format": "Volume: {volume}%",
+        "on-click": "pavucontrol"
+    },
+
+    "battery": {
+        "bat": "BAT0",
+        "adapter": "AC",
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "format": "󰁹  {capacity}%",
+        "format-charging": "󰂄  {capacity}%",
+        "format-plugged": "󰂄  {capacity}%",
+        "tooltip-format": "Bateria: {capacity}%"
+    },
+
+    "custom/hypr-state": {
+        "exec": "$HOME/.config/waybar/scripts/hypr-state.py",
+        "restart-interval": 2,
+        "tooltip": false
+    },
+
+    "custom/window": {
+        "exec": "cat \"$XDG_RUNTIME_DIR/waybar-hypr/${WAYBAR_OUTPUT_NAME:-_all}/window\" 2>/dev/null",
+        "return-type": "json",
+        "interval": "once",
+        "signal": 8,
+        "tooltip": true,
+        "max-length": 24
+    },
+
+    "group/workspaces": {
+        "orientation": "inherit",
+        "modules": [
+            "custom/ws1", "custom/ws2", "custom/ws3", "custom/ws4", "custom/ws5",
+            "custom/ws6", "custom/ws7", "custom/ws8", "custom/ws9", "custom/ws10"
+        ]
+    },
+    "custom/ws1":  { "exec": "cat \"$XDG_RUNTIME_DIR/waybar-hypr/${WAYBAR_OUTPUT_NAME:-_all}/ws1\" 2>/dev/null",  "return-type": "json", "interval": "once", "signal": 8, "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 1 })'" },
+    "custom/ws2":  { "exec": "cat \"$XDG_RUNTIME_DIR/waybar-hypr/${WAYBAR_OUTPUT_NAME:-_all}/ws2\" 2>/dev/null",  "return-type": "json", "interval": "once", "signal": 8, "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 2 })'" },
+    "custom/ws3":  { "exec": "cat \"$XDG_RUNTIME_DIR/waybar-hypr/${WAYBAR_OUTPUT_NAME:-_all}/ws3\" 2>/dev/null",  "return-type": "json", "interval": "once", "signal": 8, "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 3 })'" },
+    "custom/ws4":  { "exec": "cat \"$XDG_RUNTIME_DIR/waybar-hypr/${WAYBAR_OUTPUT_NAME:-_all}/ws4\" 2>/dev/null",  "return-type": "json", "interval": "once", "signal": 8, "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 4 })'" },
+    "custom/ws5":  { "exec": "cat \"$XDG_RUNTIME_DIR/waybar-hypr/${WAYBAR_OUTPUT_NAME:-_all}/ws5\" 2>/dev/null",  "return-type": "json", "interval": "once", "signal": 8, "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 5 })'" },
+    "custom/ws6":  { "exec": "cat \"$XDG_RUNTIME_DIR/waybar-hypr/${WAYBAR_OUTPUT_NAME:-_all}/ws6\" 2>/dev/null",  "return-type": "json", "interval": "once", "signal": 8, "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 6 })'" },
+    "custom/ws7":  { "exec": "cat \"$XDG_RUNTIME_DIR/waybar-hypr/${WAYBAR_OUTPUT_NAME:-_all}/ws7\" 2>/dev/null",  "return-type": "json", "interval": "once", "signal": 8, "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 7 })'" },
+    "custom/ws8":  { "exec": "cat \"$XDG_RUNTIME_DIR/waybar-hypr/${WAYBAR_OUTPUT_NAME:-_all}/ws8\" 2>/dev/null",  "return-type": "json", "interval": "once", "signal": 8, "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 8 })'" },
+    "custom/ws9":  { "exec": "cat \"$XDG_RUNTIME_DIR/waybar-hypr/${WAYBAR_OUTPUT_NAME:-_all}/ws9\" 2>/dev/null",  "return-type": "json", "interval": "once", "signal": 8, "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 9 })'" },
+    "custom/ws10": { "exec": "cat \"$XDG_RUNTIME_DIR/waybar-hypr/${WAYBAR_OUTPUT_NAME:-_all}/ws10\" 2>/dev/null", "return-type": "json", "interval": "once", "signal": 8, "on-click": "hyprctl dispatch 'hl.dsp.focus({ workspace = 10 })'" },
+
+    "custom/notification": {
+        "format": "{icon}",
+        "format-icons": {
+            "notification": "󱅫",
+            "none": "󰂚",
+            "dnd-notification": "󰂛",
+            "dnd-none": "󰂛",
+            "inhibited-notification": "󱅫",
+            "inhibited-none": "󰂚",
+            "dnd-inhibited-notification": "󰂛",
+            "dnd-inhibited-none": "󰂛"
+        },
+        "return-type": "json",
+        "exec-if": "command -v swaync-client",
+        "exec": "swaync-client -swb",
+        "on-click": "swaync-client -t -sw",
+        "on-click-right": "swaync-client -d -sw",
+        "escape": true
+    }
+}
+]
